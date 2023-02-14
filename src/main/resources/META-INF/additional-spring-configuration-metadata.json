@@ -1,0 +1,12 @@
+{"properties": [
+  {
+    "name": "uri.location",
+    "type": "java.lang.String",
+    "description": "A description for 'uri.location'"
+  },
+  {
+    "name": "uri.character",
+    "type": "java.lang.String",
+    "description": "A description for 'uri.character'"
+  }
+]}

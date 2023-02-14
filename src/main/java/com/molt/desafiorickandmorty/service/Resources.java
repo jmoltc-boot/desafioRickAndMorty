@@ -2,6 +2,8 @@ package com.molt.desafiorickandmorty.service;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
@@ -15,10 +17,14 @@ public class Resources {
 	
 	private static final Logger logger = LoggerFactory.getLogger(Resources.class);
 	
+	@Autowired
+	private Environment env;
 	
 	public CharacterR getCharacter(int id) {
-		String uri = "https://rickandmortyapi.com/api/character/"+id;
+		String uri = env.getProperty("uri.character")+id;
 		RestTemplate restTemplate = new RestTemplate();
+		logger.info("url obtenida {}", uri);
+		
 		CharacterR character=null;
 		try {
 			character = restTemplate.getForObject(uri,CharacterR.class);		
@@ -31,7 +37,7 @@ public class Resources {
 	}
 	
 	public LocationDetail getLocation(int id) {
-		String uri = "https://rickandmortyapi.com/api/location/"+id;
+		String uri = env.getProperty("uri.location")+id;
 		RestTemplate restTemplate = new RestTemplate();
 		LocationDetail location=null;
 		try {
@@ -57,9 +63,9 @@ public class Resources {
 		return location;
 	}
 	
-	public OutputCharacterR createCharacter(CharacterR character, LocationDetail originParam) {
+	public OutputCharacterR createCharacter(CharacterR character, LocationDetail origin) {
 		OutputCharacterR resultCharacter = new OutputCharacterR();
-		OutputOrigin origin = new OutputOrigin();
+		OutputOrigin resultOrigin = new OutputOrigin();
 		
 		resultCharacter.setId(character.getId());
 		resultCharacter.setName(character.getName());
@@ -67,15 +73,13 @@ public class Resources {
 		resultCharacter.setSpecies(character.getSpecies());
 		resultCharacter.setType(character.getType());
 		resultCharacter.setEpisode_count(character.getEpisode().size());
-		if(originParam!=null){
-			origin.setName(originParam.getName());
-			origin.setDimension(originParam.getDimension());
-			origin.setUrl(character.getLocation().getUrl());
-			origin.setResidents(originParam.getResidents());
-			resultCharacter.setOrigin(origin);
+		if(origin!=null){
+			resultOrigin.setName(origin.getName());
+			resultOrigin.setDimension(origin.getDimension());
+			resultOrigin.setUrl(character.getLocation().getUrl());
+			resultOrigin.setResidents(origin.getResidents());
+			resultCharacter.setOrigin(resultOrigin);
 		}
-
-		
 		return resultCharacter;
 	}
 	
@@ -85,7 +89,7 @@ public class Resources {
 		if(character==null) {
 			return createCharacter(null, null);
 		}
-		if(character.getOrigin()!=null && character.getOrigin().getUrl()!=null) {
+		if(character.getOrigin()!=null && !character.getOrigin().getUrl().isEmpty()) {
 			location = getLocationByUrl(character.getOrigin().getUrl());
 		}
 		return createCharacter(character, location);

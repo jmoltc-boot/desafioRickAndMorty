@@ -38,7 +38,7 @@ class GetCharacterTest {
 	
 	@Test
 	@DisplayName("GetCharacterTest")
-	void consultaEsHabilOk() throws ParseException, IOException {	
+	void ConsultaGetCharacter() throws ParseException, IOException {	
 		
 		String url = String.format("http://localhost:%d/api/character/2" , port);
 		

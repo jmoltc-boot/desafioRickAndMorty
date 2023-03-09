@@ -1,11 +1,12 @@
 
 package com.molt.desafiorickandmorty.dto;
 
+import java.io.Serializable;
 import java.util.List;
 import javax.annotation.Generated;
 
 @Generated("jsonschema2pojo")
-public class CharacterR {
+public class CharacterR implements Serializable {
 
     private Integer id;
     private String name;

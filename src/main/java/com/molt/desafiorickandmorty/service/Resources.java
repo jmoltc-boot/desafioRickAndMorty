@@ -1,9 +1,11 @@
 package com.molt.desafiorickandmorty.service;
 
+import com.molt.desafiorickandmorty.error.CharacterNotFoundException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
+import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
@@ -11,6 +13,7 @@ import com.molt.desafiorickandmorty.dto.CharacterR;
 import com.molt.desafiorickandmorty.dto.LocationDetail;
 import com.molt.desafiorickandmorty.dto.OutputCharacterR;
 import com.molt.desafiorickandmorty.dto.OutputOrigin;
+import java.nio.charset.StandardCharsets;
 
 @Service
 public class Resources {
@@ -19,15 +22,16 @@ public class Resources {
 	
 	@Autowired
 	private Environment env;
+	@Autowired
+	RestTemplate restTemplate;
 	
 	public CharacterR getCharacter(int id) {
 		String uri = env.getProperty("uri.character")+id;
-		RestTemplate restTemplate = new RestTemplate();
 		logger.info("url obtenida {}", uri);
 		
 		CharacterR character=null;
 		try {
-			character = restTemplate.getForObject(uri,CharacterR.class);		
+			character = restTemplate.exchange(uri, HttpMethod.GET, getEntity(), CharacterR.class).getBody();
 		}
 		catch(Exception e) {
 			logger.error("Error al consultar API de personajes ", e);
@@ -38,10 +42,9 @@ public class Resources {
 	
 	public LocationDetail getLocation(int id) {
 		String uri = env.getProperty("uri.location")+id;
-		RestTemplate restTemplate = new RestTemplate();
 		LocationDetail location=null;
 		try {
-			location = restTemplate.getForObject(uri,LocationDetail.class);	
+			location = restTemplate.exchange(uri, HttpMethod.GET, getEntity(), LocationDetail.class).getBody();
 		}
 		catch(Exception e) {
 			logger.error("Error al consultar API de ubicaciones ", e);
@@ -51,10 +54,9 @@ public class Resources {
 	}
 	
 	public LocationDetail getLocationByUrl(String url) {
-		RestTemplate restTemplate = new RestTemplate();
 		LocationDetail location=null;
 		try {
-			location = restTemplate.getForObject(url,LocationDetail.class);	
+			location = restTemplate.exchange(url, HttpMethod.GET, getEntity(), LocationDetail.class).getBody();
 		}
 		catch(Exception e) {
 			logger.error("Error al consultar API de ubicaciones ", e);
@@ -66,6 +68,10 @@ public class Resources {
 	public OutputCharacterR createCharacter(CharacterR character, LocationDetail origin) {
 		OutputCharacterR resultCharacter = new OutputCharacterR();
 		OutputOrigin resultOrigin = new OutputOrigin();
+
+		if(character==null){
+			throw new CharacterNotFoundException();
+		}
 		
 		resultCharacter.setId(character.getId());
 		resultCharacter.setName(character.getName());
@@ -93,6 +99,13 @@ public class Resources {
 			location = getLocationByUrl(character.getOrigin().getUrl());
 		}
 		return createCharacter(character, location);
+	}
+
+	private HttpEntity<String> getEntity(){
+		HttpHeaders headers = new HttpHeaders();
+		MediaType mediaType = new MediaType("application", "json", StandardCharsets.UTF_8);
+		headers.setContentType(mediaType);
+		return new HttpEntity<>("", headers);
 	}
 
 }

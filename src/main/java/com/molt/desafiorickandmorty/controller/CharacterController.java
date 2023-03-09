@@ -1,31 +1,26 @@
 package com.molt.desafiorickandmorty.controller;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
-
 import com.molt.desafiorickandmorty.dto.CharacterR;
 import com.molt.desafiorickandmorty.dto.OutputCharacterR;
 import com.molt.desafiorickandmorty.service.Resources;
 
 @RestController
-public class CharacterController {
-	
-	@Autowired
-	Resources resources;
+public class CharacterController implements ICharacterController {
+    private final Resources resources;
 
-	@GetMapping("/alive")
-	public String hello() {
-		return "desafiorickandmorty is working";
-	}
-	
-	@GetMapping("/api/character/{id}")
-	public ResponseEntity<Object> getCharacter(@PathVariable("id") int id) {
-		CharacterR character = resources.getCharacter(id);
-		OutputCharacterR outputCharacterR = resources.createFinalCharacter(character);
-		return new ResponseEntity<>(outputCharacterR, HttpStatus.OK);
-	}
+    public CharacterController(Resources resources) {
+        this.resources = resources;
+    }
+
+    @GetMapping("/api/character/{id}")
+    public ResponseEntity<OutputCharacterR> getCharacter(@PathVariable("id") int id) {
+        CharacterR character = resources.getCharacter(id);
+        OutputCharacterR outputCharacterR = resources.createFinalCharacter(character);
+        return new ResponseEntity<>(outputCharacterR, HttpStatus.OK);
+    }
 }

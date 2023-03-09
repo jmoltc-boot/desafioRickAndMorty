@@ -3,12 +3,13 @@ package com.molt.desafiorickandmorty.service;
 import com.molt.desafiorickandmorty.error.CharacterNotFoundException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.env.Environment;
-import org.springframework.http.*;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
-
 import com.molt.desafiorickandmorty.dto.CharacterR;
 import com.molt.desafiorickandmorty.dto.LocationDetail;
 import com.molt.desafiorickandmorty.dto.OutputCharacterR;
@@ -19,14 +20,19 @@ import com.molt.desafiorickandmorty.dto.OutputOrigin;
 public class Resources {
 	
 	private static final Logger logger = LoggerFactory.getLogger(Resources.class);
-	
-	@Autowired
-	private Environment env;
-	@Autowired
-	RestTemplate restTemplate;
-	
+	private final RestTemplate restTemplate;
+	private final String characterUri;
+	private final String locationUri;
+
+	public Resources(RestTemplate restTemplate, @Value("${uri.character}") String characterUri,
+					 @Value("${uri.location}") String locationUri) {
+		this.restTemplate = restTemplate;
+		this.characterUri = characterUri;
+		this.locationUri = locationUri;
+	}
+
 	public CharacterR getCharacter(int id) {
-		String uri = env.getProperty("uri.character")+id;
+		String uri = characterUri+id;
 		logger.info("url obtenida {}", uri);
 		
 		CharacterR character=null;
@@ -41,7 +47,7 @@ public class Resources {
 	}
 	
 	public LocationDetail getLocation(int id) {
-		String uri = env.getProperty("uri.location")+id;
+		String uri = locationUri+id;
 		LocationDetail location=null;
 		try {
 			location = restTemplate.exchange(uri, HttpMethod.GET, getEntity(), LocationDetail.class).getBody();

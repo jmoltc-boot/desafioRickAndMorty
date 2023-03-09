@@ -13,7 +13,7 @@ import com.molt.desafiorickandmorty.dto.CharacterR;
 import com.molt.desafiorickandmorty.dto.LocationDetail;
 import com.molt.desafiorickandmorty.dto.OutputCharacterR;
 import com.molt.desafiorickandmorty.dto.OutputOrigin;
-import java.nio.charset.StandardCharsets;
+
 
 @Service
 public class Resources {
@@ -103,8 +103,7 @@ public class Resources {
 
 	private HttpEntity<String> getEntity(){
 		HttpHeaders headers = new HttpHeaders();
-		MediaType mediaType = new MediaType("application", "json", StandardCharsets.UTF_8);
-		headers.setContentType(mediaType);
+		headers.set(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON.toString()  + ";charset=UTF-8");
 		return new HttpEntity<>("", headers);
 	}
 

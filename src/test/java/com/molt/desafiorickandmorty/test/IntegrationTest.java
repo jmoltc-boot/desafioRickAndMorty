@@ -21,9 +21,9 @@ import okhttp3.Response;
 
 @SuppressWarnings("deprecation")
 @SpringBootTest(classes = DesafioRickAndMortyApplication.class, webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-class GetCharacterTest {
+class IntegrationTest {
 	
-	private static final Logger logger = LoggerFactory.getLogger(GetCharacterTest.class);
+	private static final Logger logger = LoggerFactory.getLogger(IntegrationTest.class);
 
 	@LocalServerPort
 	private int port;
@@ -37,7 +37,7 @@ class GetCharacterTest {
 	}
 	
 	@Test
-	@DisplayName("GetCharacterTest")
+	@DisplayName("getCharacterTest")
 	void ConsultaGetCharacter() throws ParseException, IOException {	
 		
 		String url = String.format("http://localhost:%d/api/character/2" , port);

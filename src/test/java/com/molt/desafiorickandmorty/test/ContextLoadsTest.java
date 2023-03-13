@@ -16,7 +16,7 @@ class ContextLoadsTest {
 
 	@Test
 	@DisplayName("contextLoadsTest")
-	void contextLoadsTest() {
+	void should_create_application_context() {
 		assertNotNull(applicationContext);
 	}
 

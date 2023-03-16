@@ -11,7 +11,7 @@ import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import com.molt.desafiorickandmorty.dto.CharacterR;
-import com.molt.desafiorickandmorty.dto.LocationDetail;
+import com.molt.desafiorickandmorty.dto.LocationR;
 import com.molt.desafiorickandmorty.dto.OutputCharacterR;
 import com.molt.desafiorickandmorty.dto.OutputOrigin;
 
@@ -46,11 +46,11 @@ public class Resources {
 		return character;
 	}
 	
-	public LocationDetail getLocation(int id) {
+	public LocationR getLocation(int id) {
 		String uri = locationUri+id;
-		LocationDetail location=null;
+		LocationR location=null;
 		try {
-			location = restTemplate.exchange(uri, HttpMethod.GET, getEntity(), LocationDetail.class).getBody();
+			location = restTemplate.exchange(uri, HttpMethod.GET, getEntity(), LocationR.class).getBody();
 		}
 		catch(Exception e) {
 			logger.error("Error al consultar API de ubicaciones ", e);
@@ -59,10 +59,10 @@ public class Resources {
 		return location;
 	}
 	
-	public LocationDetail getLocationByUrl(String url) {
-		LocationDetail location=null;
+	public LocationR getLocationByUrl(String url) {
+		LocationR location=null;
 		try {
-			location = restTemplate.exchange(url, HttpMethod.GET, getEntity(), LocationDetail.class).getBody();
+			location = restTemplate.exchange(url, HttpMethod.GET, getEntity(), LocationR.class).getBody();
 		}
 		catch(Exception e) {
 			logger.error("Error al consultar API de ubicaciones ", e);
@@ -71,7 +71,7 @@ public class Resources {
 		return location;
 	}
 	
-	public OutputCharacterR createCharacter(CharacterR character, LocationDetail origin) {
+	public OutputCharacterR createCharacter(CharacterR character, LocationR origin) {
 		OutputCharacterR resultCharacter = new OutputCharacterR();
 		OutputOrigin resultOrigin = new OutputOrigin();
 
@@ -97,7 +97,7 @@ public class Resources {
 	
 	
 	public OutputCharacterR createFinalCharacter(CharacterR character) {
-		LocationDetail location=null;
+		LocationR location=null;
 		if(character==null) {
 			return createCharacter(null, null);
 		}

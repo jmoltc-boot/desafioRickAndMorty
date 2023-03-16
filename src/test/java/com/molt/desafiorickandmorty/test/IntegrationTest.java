@@ -38,7 +38,7 @@ class IntegrationTest {
 	
 	@Test
 	@DisplayName("getCharacterTest")
-	void ConsultaGetCharacter() throws ParseException, IOException {	
+	void should_get_character_with_id_2() throws ParseException, IOException {
 		
 		String url = String.format("http://localhost:%d/api/character/2" , port);
 		

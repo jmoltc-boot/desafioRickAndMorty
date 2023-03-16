@@ -14,8 +14,8 @@ public class CharacterR implements Serializable {
     private String species;
     private String type;
     private String gender;
-    private Origin origin;
-    private Location location;
+    private CharacterOriginR characterOriginR;
+    private CharacterLocationR characterLocationR;
     private String image;
     private List<String> episode;
     private String url;
@@ -69,20 +69,20 @@ public class CharacterR implements Serializable {
         this.gender = gender;
     }
 
-    public Origin getOrigin() {
-        return origin;
+    public CharacterOriginR getOrigin() {
+        return characterOriginR;
     }
 
-    public void setOrigin(Origin origin) {
-        this.origin = origin;
+    public void setOrigin(CharacterOriginR characterOriginR) {
+        this.characterOriginR = characterOriginR;
     }
 
-    public Location getLocation() {
-        return location;
+    public CharacterLocationR getLocation() {
+        return characterLocationR;
     }
 
-    public void setLocation(Location location) {
-        this.location = location;
+    public void setLocation(CharacterLocationR characterLocationR) {
+        this.characterLocationR = characterLocationR;
     }
 
     public String getImage() {

@@ -6,7 +6,7 @@ import java.util.List;
 import javax.annotation.Generated;
 
 @Generated("jsonschema2pojo")
-public class LocationDetail implements Serializable {
+public class LocationR implements Serializable {
 
     private Integer id;
     private String name;

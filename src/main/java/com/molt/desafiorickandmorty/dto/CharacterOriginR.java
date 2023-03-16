@@ -4,7 +4,7 @@ package com.molt.desafiorickandmorty.dto;
 import javax.annotation.Generated;
 
 @Generated("jsonschema2pojo")
-public class Origin {
+public class CharacterOriginR {
 
     private String name;
     private String url;
